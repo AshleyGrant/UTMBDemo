@@ -1,0 +1,51 @@
+# Pipeline that will randomly fail 33% of the time but will create a pull request from workspace_publish to development otherwise.
+
+trigger:
+- workspace_publish
+
+pool:
+  vmImage: windows-latest
+
+steps:
+  # - task: PowerShell@2
+  #   displayName: Randomly Fail
+  #   inputs:
+  #     targetType: 'inline'
+  #     script: |
+  #       $Random = Get-Random 
+        
+  #       $Mod = $Random % 3
+        
+  #       IF($Mod -eq 0)
+  #       {
+  #         exit 0
+  #       }
+  #       else {
+  #         exit 1
+  #       }
+  #     failOnStderr: true
+  #     showWarnings: true
+
+  - task: ArchiveFiles@2
+    displayName: Zip Files
+    inputs:
+      rootFolderOrFile: 'counties'
+      includeRootFolder: true
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+      replaceExistingArchive: true
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Pipeline.Workspace)'
+      publishLocation: 'pipeline'
+
+  - task: CreatePullRequest@1
+    inputs:
+      repoType: 'Azure DevOps'
+      repositorySelector: 'currentBuild'
+      sourceBranch: '$(Build.SourceBranch)'
+      targetBranch: 'development'
+      title: 'Merge workspace_publish to development'
+      description: 'Automatically created Pull Request after successful build to push from workspace_publish to development'
+      reviewers: 'asgrant@microsoft.com'
