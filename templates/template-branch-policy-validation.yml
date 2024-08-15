@@ -1,0 +1,31 @@
+#template-branch-policy-validation.yml
+parameters:
+- name: targetBranchName
+  displayName: "Target Branch Name"
+  type: string
+  default: "development"
+- name: allowedSourceBranchName
+  displayName: Allowed Source branch name
+  type: string
+  default: "workspace_publish"
+
+stages:
+- stage: branch_policy_build_validation
+  displayName: "Branch Policy Build Validation"
+  jobs:
+  - job: source_branch_validation
+    displayName: Source Branch Validation
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+    - task: PowerShell@2
+      displayName: Check Build Source Branch
+      inputs:
+        targetType: 'filePath'
+        filePath: $(System.DefaultWorkingDirectory)/templates/template-branch-policy-validation.ps1
+        arguments: >
+          -targetBranchName "${{parameters.targetBranchName}}"
+          -sourceBranch "$(System.PullRequest.SourceBranch)"
+          -allowedSourceBranchName "${{parameters.allowedSourceBranchName}}"
+        failOnStderr: true
+        showWarnings: true

@@ -1,0 +1,8 @@
+name: $(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+trigger: none
+
+stages:
+  - template: templates/template-branch-policy-validation.yml
+    parameters:
+      targetBranchName: "refs/heads/development"
+      allowedSourceBranchName: "refs/heads/workspace_publish"
