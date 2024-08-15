@@ -22,7 +22,7 @@ stages:
       displayName: Check Build Source Branch
       inputs:
         targetType: 'filePath'
-        filePath: $(System.DefaultWorkingDirectory)/templates/template-branch-policy-validation.ps1
+        filePath: $(System.DefaultWorkingDirectory)/pipelines/templates/template-branch-policy-validation.ps1
         arguments: >
           -targetBranchName "${{parameters.targetBranchName}}"
           -sourceBranch "$(System.PullRequest.SourceBranch)"
