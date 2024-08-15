@@ -7,27 +7,27 @@ pool:
   vmImage: windows-latest
 
 steps:
-  - task: PowerShell@2
-    displayName: Randomly Fail
-    inputs:
-      targetType: 'inline'
-      script: |
-        $Random = Get-Random 
+  # - task: PowerShell@2
+  #   displayName: Randomly Fail
+  #   inputs:
+  #     targetType: 'inline'
+  #     script: |
+  #       $Random = Get-Random 
         
-        $Mod = $Random % 3
+  #       $Mod = $Random % 3
 
-        Write-Host "Random $Random"
-        Write-Host "Mod $Mod"
+  #       Write-Host "Random $Random"
+  #       Write-Host "Mod $Mod"
         
-        IF($Mod -eq 0)
-        {
-          exit 1
-        }
-        else {
-          exit 0
-        }
-      failOnStderr: true
-      showWarnings: true
+  #       IF($Mod -eq 0)
+  #       {
+  #         exit 1
+  #       }
+  #       else {
+  #         exit 0
+  #       }
+  #     failOnStderr: true
+  #     showWarnings: true
 
   - task: ArchiveFiles@2
     displayName: Zip Files
@@ -48,7 +48,7 @@ steps:
       repoType: 'Azure DevOps'
       repositorySelector: 'currentBuild'
       sourceBranch: '$(Build.SourceBranch)'
-      targetBranch: 'development'
+      targetBranch: 'validation'
       title: 'Merge workspace_publish to development'
-      description: 'Automatically created Pull Request after successful build to push from workspace_publish to development'
+      description: 'Automatically created Pull Request after successful build to push from workspace_publish to validation'
       reviewers: 'asgrant@microsoft.com'
