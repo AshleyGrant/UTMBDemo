@@ -5,4 +5,4 @@ stages:
   - template: templates/template-branch-policy-validation.yml
     parameters:
       targetBranchName: "refs/heads/development"
-      allowedSourceBranchName: "refs/heads/workspace_publish"
+      allowedSourceBranchName: "refs/heads/validation"
